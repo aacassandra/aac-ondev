@@ -1,44 +1,40 @@
 import React from "react";
-import { Header, Sidebar, Footer } from "../../components/molecules/dashboard";
-// import Screens from '../../screen';
+import { Route } from "react-router-dom";
+import {
+  Header,
+  Sidebar,
+  Footer,
+  Preloader,
+} from "../../components/molecules/dashboard";
+import Dashboard from "../../pages/dashboard";
 
-// const Router = props => {
-//   return (
-//     <div>
-//       <Screens.Dashboard
-//         style={props.match.path !== '/dashboard' ? page.disabled : ''}
-//         match={props.match}
-//       />
-//     </div>
-//   );
-// };
-
-const Admin = (props) => {
+const Admin = ({ match }) => {
+  const path = match.path;
   return (
     <div>
       <Header.Mobile />
       <div className="container-fluid bg-soft">
         <div className="row">
           <div className="col-12">
-            <Sidebar />
-            <main class="content">
+            <Sidebar match={match} />
+            <main className="content">
               <Header.Desktop />
+              {/* <Preloader /> */}
+              <Route
+                path={path + "/overview"}
+                component={Dashboard.Main.Overview}
+              />
+              <Route
+                path={path + "/traffic-&-engagement"}
+                component={Dashboard.Main.Traffic}
+              />
               <Footer />
             </main>
           </div>
         </div>
       </div>
-      {/* <Sidebar />
-      <Router match={props.match} />
-      <Footer /> */}
     </div>
   );
 };
-
-// const page = {
-//   disabled: {
-//     display: 'none'
-//   }
-// };
 
 export default Admin;
