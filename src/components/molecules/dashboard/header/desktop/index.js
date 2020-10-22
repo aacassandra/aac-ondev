@@ -3,7 +3,7 @@ import React from "react";
 
 export default function index() {
   return (
-    <nav className="navbar navbar-top navbar-expand navbar-dashboard navbar-dark pl-0 pr-2 pb-0">
+    <nav className="navbar navbar-top navbar-expand navbar-dark pl-0 pr-2 pb-0">
       <div className="container-fluid px-0">
         <div
           className="d-flex justify-content-between w-100"
@@ -57,7 +57,7 @@ export default function index() {
                     <div className="row align-items-center">
                       <div className="col-auto">
                         <img
-                          alt="Image placeholder"
+                          alt="Images placeholder"
                           src="../../../../../assets/img/team/profile-picture-1.jpg"
                           className="user-avatar lg-avatar rounded-circle"
                         />
@@ -87,7 +87,7 @@ export default function index() {
                     <div className="row align-items-center">
                       <div className="col-auto">
                         <img
-                          alt="Image placeholder"
+                          alt="Images placeholder"
                           src="../../../../../assets/img/team/profile-picture-2.jpg"
                           className="user-avatar lg-avatar rounded-circle"
                         />
@@ -114,7 +114,7 @@ export default function index() {
                     <div className="row align-items-center">
                       <div className="col-auto">
                         <img
-                          alt="Image placeholder"
+                          alt="Images placeholder"
                           src="../../../../../assets/img/team/profile-picture-3.jpg"
                           className="user-avatar lg-avatar rounded-circle"
                         />
@@ -144,7 +144,7 @@ export default function index() {
                     <div className="row align-items-center">
                       <div className="col-auto">
                         <img
-                          alt="Image placeholder"
+                          alt="Images placeholder"
                           src="../../../../../assets/img/team/profile-picture-4.jpg"
                           className="user-avatar lg-avatar rounded-circle"
                         />
@@ -172,7 +172,7 @@ export default function index() {
                     <div className="row align-items-center">
                       <div className="col-auto">
                         <img
-                          alt="Image placeholder"
+                          alt="Images placeholder"
                           src="../../../../../assets/img/team/profile-picture-5.jpg"
                           className="user-avatar lg-avatar rounded-circle"
                         />
@@ -214,7 +214,7 @@ export default function index() {
                 <div className="media d-flex align-items-center">
                   <img
                     className="user-avatar md-avatar rounded-circle"
-                    alt="Images placeholder."
+                    alt="Imagess placeholder."
                     src="../../../../../assets/img/team/profile-picture-3.jpg"
                   />
                   <div className="media-body ml-2 text-dark align-items-center d-none d-lg-block">

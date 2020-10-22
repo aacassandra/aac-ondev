@@ -11,7 +11,7 @@ export default class index extends Component {
         data-simplebar
       >
         <div className="sidebar-inner px-4 pt-3">
-          <div className="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
+          <div className="user-card d-flex align-items-center justify-content-between justify-content-md-center pb-4">
             <div className="d-flex align-items-center">
               <div className="user-avatar lg-avatar mr-4">
                 <img
@@ -56,7 +56,7 @@ export default class index extends Component {
                   <span className="sidebar-icon">
                     <span className="fas fa-chart-pie"></span>
                   </span>
-                  Dashboard{" "}
+                  Dashboard
                 </span>
                 <span className="link-arrow">
                   <span className="fas fa-chevron-right"></span>
@@ -102,7 +102,7 @@ export default class index extends Component {
                   <span className="sidebar-icon">
                     <span className="fas fa-inbox"></span>
                   </span>
-                  Messages{" "}
+                  Messages
                 </span>
                 <span className="badge badge-md bg-danger badge-pill">4</span>
               </a>
@@ -165,7 +165,7 @@ export default class index extends Component {
                   <span className="sidebar-icon">
                     <span className="fas fa-table"></span>
                   </span>
-                  Tables{" "}
+                  Tables
                 </span>
                 <span className="link-arrow">
                   <span className="fas fa-chevron-right"></span>
@@ -204,7 +204,7 @@ export default class index extends Component {
                   <span className="sidebar-icon">
                     <span className="far fa-file-alt"></span>
                   </span>
-                  Page examples{" "}
+                  Page examples
                 </span>
                 <span className="link-arrow">
                   <span className="fas fa-chevron-right"></span>
@@ -286,7 +286,7 @@ export default class index extends Component {
                   <span className="sidebar-icon">
                     <span className="fas fa-box-open"></span>
                   </span>
-                  Components{" "}
+                  Components
                 </span>
                 <span className="link-arrow">
                   <span className="fas fa-chevron-right"></span>
@@ -350,7 +350,7 @@ export default class index extends Component {
                     height="20"
                     width="20"
                     alt="Volt Logo"
-                  />{" "}
+                  />
                 </span>
                 <span className="mt-1">Volt Overview</span>
               </a>
@@ -396,7 +396,7 @@ export default class index extends Component {
                     height="20"
                     width="20"
                     alt="Themesberg Logo"
-                  />{" "}
+                  />
                 </span>
                 <span>Themesberg</span>
               </a>
