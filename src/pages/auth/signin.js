@@ -1,6 +1,128 @@
 import React, { Component } from "react";
+import { ParseSignIn } from "@aacassandra/parse-lib";
+import SimpleCrypto from "simple-crypto-js";
+import Swal from "sweetalert2";
+
+const secretKey = "eyro-digital-teknologi";
+const simpleCrypto = new SimpleCrypto(secretKey);
 
 export default class Signin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      captcha: "",
+      backupCaptcha: "",
+      rememberMe: false,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.createCaptcha = this.createCaptcha.bind(this);
+  }
+
+  createCaptcha() {
+    // clear the contents of captcha div first
+    document.getElementById("genCaptcha").innerHTML = "";
+    const charsArray =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lengthOtp = 6;
+    const captcha = [];
+    for (let i = 0; i < lengthOtp; i++) {
+      // below code will not allow Repetition of Characters
+      const index = Math.floor(Math.random() * charsArray.length + 1); // get the next character from the array
+      if (captcha.indexOf(charsArray[index]) === -1)
+        captcha.push(charsArray[index]);
+      else i--;
+    }
+    const canv = document.createElement("canvas");
+    canv.id = "genCaptcha";
+    canv.width = 100;
+    canv.height = 36;
+    const ctx = canv.getContext("2d");
+    ctx.font = "20px Calibri";
+    ctx.strokeText(captcha.join(""), 0, 30);
+    // storing captcha so that can valipdate you can save it somewhere else according to your specific requirements
+    this.setState({
+      backupCaptcha: captcha.join(""),
+    });
+
+    document.getElementById("genCaptcha").appendChild(canv); // adds the canvas to the body element
+  }
+
+  componentDidMount() {
+    this.createCaptcha();
+    if (localStorage.client) {
+      const client = JSON.parse(localStorage.client);
+      if (client.sessionToken !== null) {
+        this.props.history.push("/dashboard/overview");
+      } else {
+        if (client.rememberMe === true) {
+          const passwordDecrypted = simpleCrypto.decrypt(client.password);
+          this.setState({
+            rememberMe: true,
+            username: client.username,
+            password: passwordDecrypted,
+          });
+        }
+      }
+    }
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const { username, password, rememberMe } = this.state;
+
+    if (this.state.captcha !== this.state.backupCaptcha) {
+      this.createCaptcha();
+      Swal.fire("Captcha Not Match!", "Please correct your captcha", "error");
+    } else {
+      ParseSignIn(username, password)
+        .then((response) => {
+          const passwordEncrypted = simpleCrypto.encrypt(password);
+          localStorage.client = JSON.stringify({
+            username,
+            password: passwordEncrypted,
+            captcha: "",
+            rememberMe,
+            avatar: response.output.avatar ? response.output.avatar.url : "",
+            sessionToken: response.output.sessionToken,
+          });
+          this.props.history.push("/dashboard/overview");
+        })
+        .catch((error) => {
+          if (localStorage.client) {
+            localStorage.clear();
+          }
+
+          this.setState({
+            rememberMe: false,
+            username: "",
+            password: "",
+            captcha: "",
+          });
+
+          this.createCaptcha();
+          Swal.fire(
+            "Signin Failed",
+            "Your username or password is invalid",
+            "error"
+          );
+        });
+    }
+  }
+
   render() {
     return (
       <main>
@@ -15,24 +137,27 @@ export default class Signin extends Component {
                   <div className="text-center text-md-center mb-4 mt-md-0">
                     <h1 className="mb-0 h3">Sign in to our platform</h1>
                   </div>
-                  <form action="#" className="mt-4">
+                  <form onSubmit={this.handleSubmit} className="mt-4">
                     <div className="form-group mb-4">
-                      <label htmlFor="email">Your Email</label>
+                      <label htmlFor="username">Your Username</label>
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">
                           <span className="fas fa-envelope"></span>
                         </span>
                         <input
-                          type="email"
+                          type="username"
                           className="form-control"
-                          placeholder="example@company.com"
-                          id="email"
+                          placeholder="Username"
+                          id="username"
+                          name="username"
                           autoFocus
+                          value={this.state.username}
+                          onChange={this.handleChange}
                           required
                         />
                       </div>
                     </div>
-                    <div className="form-group">
+                    <div>
                       <div className="form-group mb-4">
                         <label htmlFor="password">Your Password</label>
                         <div className="input-group">
@@ -44,8 +169,39 @@ export default class Signin extends Component {
                             placeholder="Password"
                             className="form-control"
                             id="password"
+                            name="password"
+                            value={this.state.password}
+                            onChange={this.handleChange}
                             required
                           />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-9">
+                          <div className="form-group mb-4">
+                            <label htmlFor="captcha">Captcha</label>
+                            <div className="input-group">
+                              <span
+                                className="input-group-text"
+                                id="basic-addon3"
+                              >
+                                <span className="fas fa-robot"></span>
+                              </span>
+                              <input
+                                type="text"
+                                placeholder="Captcha"
+                                className="form-control"
+                                id="captcha"
+                                name="captcha"
+                                value={this.state.captcha}
+                                onChange={this.handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-3 mt-auto mb-auto">
+                          <div id="genCaptcha"></div>
                         </div>
                       </div>
                       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -53,12 +209,14 @@ export default class Signin extends Component {
                           <input
                             className="form-check-input"
                             type="checkbox"
-                            value=""
-                            id="defaultCheck5"
+                            id="rememberMe"
+                            name="rememberMe"
+                            checked={this.state.rememberMe}
+                            onChange={this.handleChange}
                           />
                           <label
                             className="form-check-label"
-                            htmlFor="defaultCheck5"
+                            htmlFor="rememberMe"
                           >
                             Remember me
                           </label>
@@ -74,44 +232,10 @@ export default class Signin extends Component {
                       Sign in
                     </button>
                   </form>
-                  <div className="mt-3 mb-4 text-center">
-                    <span className="font-weight-normal">or login with</span>
-                  </div>
-                  <div className="btn-wrapper my-4 text-center">
-                    <button
-                      className="btn btn-icon-only btn-pill btn-outline-light text-facebook mr-2"
-                      type="button"
-                      aria-label="facebook button"
-                      title="facebook button"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="fab fa-facebook-f"
-                      ></span>
-                    </button>
-                    <button
-                      className="btn btn-icon-only btn-pill btn-outline-light text-twitter mr-2"
-                      type="button"
-                      aria-label="twitter button"
-                      title="twitter button"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="fab fa-twitter"
-                      ></span>
-                    </button>
-                    <button
-                      className="btn btn-icon-only btn-pill btn-outline-light text-facebook"
-                      type="button"
-                      aria-label="github button"
-                      title="github button"
-                    >
-                      <span aria-hidden="true" className="fab fa-github"></span>
-                    </button>
-                  </div>
+
                   <div className="d-flex justify-content-center align-items-center mt-4">
                     <span className="font-weight-normal">
-                      Not registered?
+                      Not registered?{" "}
                       <a href="sign-up.html" className="font-weight-bold">
                         Create account
                       </a>

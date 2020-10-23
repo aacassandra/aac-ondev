@@ -1,7 +1,93 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { ParseSignOut } from "@aacassandra/parse-lib";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import clientDefault from "../../../../../assets/img/avatar-default.png";
+import Data from "../../../../../data";
 
+function UserDropdownMenu() {
+  const signOutRef = useRef(null);
+
+  function SingOut() {
+    let client = Data.Client();
+
+    ParseSignOut(client.sessionToken)
+      .then((response) => {
+        if (client.rememberMe === true) {
+          client.sessionToken = null;
+          localStorage.client = JSON.stringify(client);
+        } else {
+          localStorage.clear();
+        }
+        signOutRef.current.click();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function handleClick() {
+    Swal.fire({
+      title: "Signout",
+      text:
+        "Are you sure you want to signout the application? click yes to signout",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        SingOut();
+      }
+    });
+  }
+
+  return (
+    <div className="dropdown-menu dashboard-dropdown dropdown-menu-right mt-2">
+      <a className="dropdown-item font-weight-bold" href="#">
+        <span className="far fa-user-circle"></span>My Profile
+      </a>
+      <a className="dropdown-item font-weight-bold" href="#">
+        <span className="fas fa-cog"></span>Settings
+      </a>
+      <a className="dropdown-item font-weight-bold" href="#">
+        <span className="fas fa-envelope-open-text"></span>Messages
+      </a>
+      <a className="dropdown-item font-weight-bold" href="#">
+        <span className="fas fa-user-shield"></span>Support
+      </a>
+      <div role="separator" className="dropdown-divider"></div>
+      <div
+        className="dropdown-item font-weight-bold"
+        style={{ cursor: "pointer" }}
+        onClick={handleClick}
+      >
+        <span className="fas fa-sign-out-alt text-danger"></span>
+        Logouts
+      </div>
+      <Link
+        className="dropdown-item font-weight-bold d-none"
+        to="/"
+        ref={signOutRef}
+      >
+        <span className="fas fa-sign-out-alt text-danger"></span>
+        Logout
+      </Link>
+    </div>
+  );
+}
+
+// create our ref
 export default function index() {
+  let client = JSON.parse(localStorage.client);
+  let username = client.username;
+  let userPadding = false;
+  if (username.length <= 9) {
+    userPadding = true;
+  }
+
   return (
     <nav className="navbar navbar-top navbar-expand navbar-dark pl-0 pr-2 pb-0">
       <div className="container-fluid px-0">
@@ -215,34 +301,20 @@ export default function index() {
                   <img
                     className="user-avatar md-avatar rounded-circle"
                     alt="Imagess placeholder."
-                    src="../../../../../assets/img/team/profile-picture-3.jpg"
+                    src={client.avatar ? client.avatar : clientDefault}
                   />
-                  <div className="media-body ml-2 text-dark align-items-center d-none d-lg-block">
+                  <div
+                    className={`media-body ml-2 text-dark align-items-center d-none d-lg-block ${
+                      userPadding === true ? "pr-lg-5" : ""
+                    }`}
+                  >
                     <span className="mb-0 font-small font-weight-bold">
-                      Bonnie Green
+                      {client.username}
                     </span>
                   </div>
                 </div>
               </a>
-              <div className="dropdown-menu dashboard-dropdown dropdown-menu-right mt-2">
-                <a className="dropdown-item font-weight-bold" href="#">
-                  <span className="far fa-user-circle"></span>My Profile
-                </a>
-                <a className="dropdown-item font-weight-bold" href="#">
-                  <span className="fas fa-cog"></span>Settings
-                </a>
-                <a className="dropdown-item font-weight-bold" href="#">
-                  <span className="fas fa-envelope-open-text"></span>Messages
-                </a>
-                <a className="dropdown-item font-weight-bold" href="#">
-                  <span className="fas fa-user-shield"></span>Support
-                </a>
-                <div role="separator" className="dropdown-divider"></div>
-                <a className="dropdown-item font-weight-bold" href="#">
-                  <span className="fas fa-sign-out-alt text-danger"></span>
-                  Logout
-                </a>
-              </div>
+              <UserDropdownMenu />
             </li>
           </ul>
         </div>

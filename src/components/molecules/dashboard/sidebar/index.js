@@ -60,63 +60,59 @@ export default function index(props) {
           {Sidebar.List.map((e, i) => {
             // multi-level
             if (e.child && e.child.length >= 1) {
-              if (!e.hide) {
-                return (
-                  <li className="nav-item" key={i}>
-                    <span
-                      className="nav-link d-flex justify-content-between align-items-center"
-                      data-toggle="collapse"
-                      data-target={"#" + e.name + "-" + i}
-                    >
-                      <Title name={e.name} icon={e.icon} />
-                      <LinkArrow />
-                    </span>
-                    <div
-                      className={`multi-level collapse ${
-                        e.path === path ? "show" : ""
-                      }`}
-                      role="list"
-                      id={e.name + "-" + i}
-                      aria-expanded="false"
-                    >
-                      <ul className="flex-column nav">
-                        {e.child.map((c, u) => {
-                          return (
-                            <li
-                              className={`nav-item ${
-                                urlElements === e.path + c.to ? "active" : ""
-                              }`}
-                              key={u}
-                            >
-                              <Link to={e.path + c.to} className="nav-link">
-                                <span>{c.name}</span>
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </li>
-                );
-              }
-            }
-            // single-level
-            else {
-              if (!e.hide) {
-                return (
-                  <li
-                    className={`nav-item ${e.path === path ? "active" : ""}`}
-                    key={i}
+              return (
+                <li className={`nav-item ${e.hide ? "d-none" : ""}`} key={i}>
+                  <span
+                    className="nav-link d-flex justify-content-between align-items-center"
+                    data-toggle="collapse"
+                    data-target={"#" + e.name + "-" + i}
                   >
-                    <Link to={e.path} className="nav-link">
-                      <span className="sidebar-icon">
-                        <span className={e.icon}></span>
-                      </span>
-                      <span>{e.name}</span>
-                    </Link>
-                  </li>
-                );
-              }
+                    <Title name={e.name} icon={e.icon} />
+                    <LinkArrow />
+                  </span>
+                  <div
+                    className={`multi-level collapse ${
+                      e.path === path ? "show" : ""
+                    }`}
+                    role="list"
+                    id={e.name + "-" + i}
+                    aria-expanded="false"
+                  >
+                    <ul className="flex-column nav">
+                      {e.child.map((c, u) => {
+                        return (
+                          <li
+                            className={`nav-item ${
+                              urlElements === e.path + c.to ? "active" : ""
+                            }`}
+                            key={u}
+                          >
+                            <Link to={e.path + c.to} className="nav-link">
+                              <span>{c.name}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </li>
+              );
+            } else {
+              return (
+                <li
+                  className={`nav-item ${e.path === path ? "active" : ""} ${
+                    e.hide ? "d-none" : ""
+                  }`}
+                  key={i}
+                >
+                  <Link to={e.path} className="nav-link">
+                    <span className="sidebar-icon">
+                      <span className={e.icon}></span>
+                    </span>
+                    <span>{e.name}</span>
+                  </Link>
+                </li>
+              );
             }
           })}
         </ul>

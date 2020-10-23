@@ -19,7 +19,7 @@ const Admin = ({ match }) => {
             <Sidebar match={match} />
             <main className="content">
               <Header.Desktop />
-              {/* <Preloader /> */}
+              <Preloader />
               <Route
                 path={path + "/overview"}
                 component={Dashboard.Main.Overview}

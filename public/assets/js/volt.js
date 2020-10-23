@@ -33,16 +33,16 @@ d.addEventListener("DOMContentLoaded", function (event) {
     xl: 1140,
   };
 
-  var preloader = d.querySelector(".preloader");
-  if (preloader) {
-    setTimeout(function () {
-      preloader.classList.add("show");
+  // var preloader = d.querySelector(".preloader");
+  // if (preloader) {
+  //   setTimeout(function () {
+  //     preloader.classList.add("show");
 
-      setTimeout(function () {
-        d.querySelector(".loader-element").classList.add("hide");
-      }, 200);
-    }, 1000);
-  }
+  //     setTimeout(function () {
+  //       d.querySelector(".loader-element").classList.add("hide");
+  //     }, 200);
+  //   }, 1000);
+  // }
 
   if (d.body.clientWidth >= breakpoints.lg) {
     [].slice.call(d.querySelectorAll(".nav-item.dropdown")).map(function (el) {
