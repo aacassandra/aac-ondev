@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./configs/routes";
 import * as serviceWorker from "./serviceWorker";
 import { ParseConfig } from "@aacassandra/parse-lib";
+import "./assets/css/pace.css";
 
 ParseConfig({
   mode: process.env.REACT_APP_MODE,
@@ -24,7 +25,12 @@ ParseConfig({
   headerSessionToken: process.env.REACT_APP_PARSE_HEADER_SESSION_TOKEN,
 });
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

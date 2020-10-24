@@ -20,6 +20,7 @@ function UserDropdownMenu() {
         } else {
           localStorage.clear();
         }
+
         signOutRef.current.click();
       })
       .catch((error) => {
@@ -81,11 +82,16 @@ function UserDropdownMenu() {
 
 // create our ref
 export default function index() {
-  let client = JSON.parse(localStorage.client);
-  let username = client.username;
+  let client = Data.Client();
+  let username = null;
+  let avatar = null;
   let userPadding = false;
-  if (username.length <= 9) {
-    userPadding = true;
+  if (client !== null) {
+    username = client.username;
+    avatar = client.avatar;
+    if (username.length <= 9) {
+      userPadding = true;
+    }
   }
 
   return (
@@ -301,7 +307,7 @@ export default function index() {
                   <img
                     className="user-avatar md-avatar rounded-circle"
                     alt="Imagess placeholder."
-                    src={client.avatar ? client.avatar : clientDefault}
+                    src={avatar ? avatar : clientDefault}
                   />
                   <div
                     className={`media-body ml-2 text-dark align-items-center d-none d-lg-block ${
@@ -309,7 +315,7 @@ export default function index() {
                     }`}
                   >
                     <span className="mb-0 font-small font-weight-bold">
-                      {client.username}
+                      {username ? username : "Uknown User"}
                     </span>
                   </div>
                 </div>

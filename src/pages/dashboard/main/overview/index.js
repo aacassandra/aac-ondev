@@ -4,6 +4,7 @@ import {
   ContentHeader,
 } from "../../../../components/atoms/dashboard";
 import Content from "./content";
+import { Title } from "../../../../components/atoms/global";
 
 const breadcrumb = [
   {
@@ -20,6 +21,7 @@ const header = {
 export default function content() {
   return (
     <div className="py-4">
+      <Title name="Overview" />
       <Breadcrumb breadcrumb={breadcrumb} />
       <div className="d-flex justify-content-between w-100 flex-wrap">
         <ContentHeader header={header} />

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { ParseSignIn } from "@aacassandra/parse-lib";
 import SimpleCrypto from "simple-crypto-js";
 import Swal from "sweetalert2";
+import { Title } from "../../components/atoms/global";
 
 const secretKey = "eyro-digital-teknologi";
 const simpleCrypto = new SimpleCrypto(secretKey);
@@ -22,7 +23,9 @@ export default class Signin extends Component {
     this.createCaptcha = this.createCaptcha.bind(this);
   }
 
-  createCaptcha() {
+  createCaptcha(from = "") {
+    console.log(from);
+    console.log("create cpatcha");
     // clear the contents of captcha div first
     document.getElementById("genCaptcha").innerHTML = "";
     const charsArray =
@@ -52,7 +55,7 @@ export default class Signin extends Component {
   }
 
   componentDidMount() {
-    this.createCaptcha();
+    this.createCaptcha("did mount");
     if (localStorage.client) {
       const client = JSON.parse(localStorage.client);
       if (client.sessionToken !== null) {
@@ -84,7 +87,9 @@ export default class Signin extends Component {
     event.preventDefault();
     const { username, password, rememberMe } = this.state;
 
-    if (this.state.captcha !== this.state.backupCaptcha) {
+    if (this.state.captcha === "") {
+      Swal.fire("Captcha Required", "Please insert the captcha", "warning");
+    } else if (this.state.captcha !== this.state.backupCaptcha) {
       this.createCaptcha();
       Swal.fire("Captcha Not Match!", "Please correct your captcha", "error");
     } else {
@@ -126,6 +131,7 @@ export default class Signin extends Component {
   render() {
     return (
       <main>
+        <Title name="Signin" />
         <section className="vh-lg-100 bg-soft d-flex align-items-center">
           <div className="container">
             <div
@@ -195,7 +201,7 @@ export default class Signin extends Component {
                                 name="captcha"
                                 value={this.state.captcha}
                                 onChange={this.handleChange}
-                                required
+                                // required
                               />
                             </div>
                           </div>

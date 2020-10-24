@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import {
   Header,
   Sidebar,
@@ -7,8 +7,21 @@ import {
   Preloader,
 } from "../../components/molecules/dashboard";
 import Dashboard from "../../pages/dashboard";
+import { checkIsAuthenticated } from "../../services/auth";
 
-const Admin = ({ match }) => {
+function sessionCheck(history) {
+  checkIsAuthenticated().catch(() => {
+    history.push("/");
+  });
+}
+
+export default function Admin({ match }) {
+  const history = useHistory();
+
+  if (process.env.REACT_APP_SESSION_CHECK === "true") {
+    sessionCheck(history);
+  }
+
   const path = match.path;
   return (
     <div>
@@ -35,6 +48,4 @@ const Admin = ({ match }) => {
       </div>
     </div>
   );
-};
-
-export default Admin;
+}

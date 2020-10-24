@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import auth from "../auth";
+import Auth from "../auth";
 
 const Guard = ({ component: Component, ...rest }) => {
+  const isAuthenticated = Auth.isAuthenticated();
   return (
     <Route
       {...rest}
-      render={(props) => {
-        if (auth.isAuthenticated()) {
-          return <Component {...props} />;
-        }
-        return (
+      render={(props) =>
+        isAuthenticated ? (
+          <Component {...props} />
+        ) : (
           <Redirect
             to={{
               pathname: "/",
@@ -19,8 +19,8 @@ const Guard = ({ component: Component, ...rest }) => {
               },
             }}
           />
-        );
-      }}
+        )
+      }
     />
   );
 };
